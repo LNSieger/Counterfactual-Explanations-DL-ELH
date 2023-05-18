@@ -51,7 +51,7 @@ def ScoringCounterfactuals(reasoner, concept, data_file, NS,
     candidate_kbs = candidate_generator.kb_dict
     counterfactual_concepts = []
     for key, value in counterfactuals.items():
-        counterfactual_concepts.append(value['concept_part'])
+        counterfactual_concepts.append(value['candidate'])
     counterfactual_kbs = {}
     for concept in candidate_kbs:
         if concept in counterfactual_concepts:
@@ -97,7 +97,7 @@ def ScoringCounterfactuals(reasoner, concept, data_file, NS,
         if likeliness_dict[candidate].get(
                 'lowest_distance') == min_change_comp:
             for counterfactual in counterfactuals:
-                if counterfactuals[counterfactual].get('concept_part') == likeliness_dict[candidate].get('concept'):
+                if counterfactuals[counterfactual].get('candidate') == likeliness_dict[candidate].get('concept'):
                     counterfactual_number = counterfactual               
             winning_counterfactual = counterfactuals[counterfactual_number]
             counterfactuals_winners_minimum.append(winning_counterfactual)
@@ -116,7 +116,7 @@ def ScoringCounterfactuals(reasoner, concept, data_file, NS,
     for candidate in all_averages:
         if all_averages[f'{candidate}'] == minimum_average:
             for counterfactual in counterfactuals:
-                if counterfactuals[counterfactual].get('concept_part') == likeliness_dict[f'{candidate}'].get('concept'):
+                if counterfactuals[counterfactual].get('candidate') == likeliness_dict[f'{candidate}'].get('concept'):
                     counterfactual_number = counterfactual               
             winning_counterfactual_average = counterfactuals[counterfactual_number]
             counterfactuals_winners_average.append(
