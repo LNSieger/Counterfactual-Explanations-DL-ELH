@@ -10,14 +10,17 @@ import copy
 import csv
 import random
 import sys
-os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.append(os.path.join(os.getcwd(), 'Counterfactual_Generation'))
+sys.path.append("//home/leo/sciebo/Python/counterfactuals_private_github")
 from scoring import ScoringCounterfactuals
-
+from materialize_KB import Materializer
+os.chdir("//home/leo")
 random.seed(4141)
 
-data_file = f'{os.getcwd()}/Experiments/animals_ELH.owl'
-NS = 'http://dl-learner.org/benchmark/dataset/animals#'
+input_onto = "/home/leo/sciebo/Datasets/animals_ELH.owl"
+NS = "http://dl-learner.org/benchmark/dataset/animals#"
+
+Materializer = Materializer(input_onto)
+data_file = Materializer.materialize_ABox()
 
 # Create reasoners
 onto = KnowledgeBase(path=data_file).ontology()
@@ -29,10 +32,10 @@ reasoner = OWLReasoner_FastInstanceChecker(onto,
                                            sub_properties=True)
 
 # Enter the absolute path of the input knowledge base
-kb_path = f'{os.getcwd()}/Experiments/animals_ELH.owl'
+kb_path = '/home/leo/sciebo/Datasets/animals_ELH.owl'
 # To download DL-learner,
 # https://github.com/SmartDataAnalytics/DL-Learner/releases.
-dl_learner_binary_path = f'{os.getcwd()}/dllearner-1.5.0/'
+dl_learner_binary_path = '/home/leo/dllearner-1.5.0/'
 # Initialize ELTL
 eltl = DLLearnerBinder(binary_path=dl_learner_binary_path,
                        kb_path=kb_path,
@@ -163,7 +166,6 @@ with open('Results_animals_replication.csv', 'w', newline='') as output_file:
     dict_writer.writerows(filecontents)
 
 # Choose which counterfactuals to present in online study
-
 '''
 for_study = copy.deepcopy(all_animals)
 for_study.remove(OWLNamedIndividual(IRI(NS, 'boy01')))  # because it is the same as 'girl'

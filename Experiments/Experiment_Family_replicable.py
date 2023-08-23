@@ -2,20 +2,24 @@ import os
 from ontolearn.binders import DLLearnerBinder
 from owlapy.parser import ManchesterOWLSyntaxParser
 from ontolearn.knowledge_base import KnowledgeBase
-from owlapy.model import IRI, OWLObjectIntersectionOf, OWLThing, \
-    OWLClassAssertionAxiom, OWLDeclarationAxiom, OWLClass,\
-    OWLObjectSomeValuesFrom, OWLNamedIndividual, OWLObjectProperty
+from owlapy.model import IRI, OWLObjectIntersectionOf, OWLClass, OWLThing, \
+    OWLClassAssertionAxiom, OWLDeclarationAxiom, OWLObjectSomeValuesFrom, \
+    OWLObjectProperty, OWLNamedIndividual
 from owlapy.owlready2._base import OWLReasoner_Owlready2
 from owlapy.fast_instance_checker import OWLReasoner_FastInstanceChecker
 import csv
 import random
 import sys
-os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.append(os.path.join(os.getcwd(), 'Counterfactual_Generation'))
+sys.path.append("//home/leo/sciebo/Python")
 from scoring import ScoringCounterfactuals
+from materialize_KB import Materializer
+os.chdir("//home/leo")
 
-data_file = f'{os.getcwd()}/Experiments/family-benchmark_rich_background_mod.owl'
-NS = 'http://www.benchmark.org/family#'
+input_onto = "/home/leo/sciebo/Datasets/family-benchmark_rich_background_mod.owl"
+NS = "http://www.benchmark.org/family#"
+
+Materializer = Materializer(input_onto)
+data_file = Materializer.materialize_ABox()
 
 # Create reasoners
 onto_base = KnowledgeBase(path=data_file).ontology()
@@ -42,7 +46,7 @@ def RemoveClass(onto_base, onto_editing, anyclass, manager_editing, reasoner):
     manager_editing.remove_axiom(onto_editing, OWLDeclarationAxiom(anyclass))
     manager_editing.save_ontology(onto_editing, IRI.create(
         f'file:/Family_without_{anyclass.get_iri().get_remainder()}.owl'))
-    output_path = (f'/{os.getcwd()}/Family_without_'
+    output_path = ('/home/leo/Family_without_'
                    + f'{anyclass.get_iri().get_remainder()}.owl')
     return output_path
 
@@ -75,7 +79,7 @@ def CreateNegatives(onto_base, positive):
 
 
 for anyclass in all_classes:
-
+    
     onto_editing = KnowledgeBase(path=data_file).ontology()
     manager_editing = onto_editing.get_owl_ontology_manager()
 
@@ -124,7 +128,7 @@ for anyclass in all_classes:
                         filler=OWLThing)])
         prediction = 'Female and (hasSibling some Thing)'
         individual = OWLNamedIndividual(IRI(NS, 'F9F143'))
-
+    
     elif anyclass == OWLClass(IRI('http://www.benchmark.org/family#',
                                   'Grandfather')):
         concept = OWLObjectIntersectionOf([
@@ -134,6 +138,7 @@ for anyclass in all_classes:
                         filler=OWLClass(IRI(NS, 'Parent')))])
         prediction = 'Male and (hasChild some Parent)'
         individual = OWLNamedIndividual(IRI(NS, 'F3M45'))
+   
 
     else:
 
@@ -143,7 +148,7 @@ for anyclass in all_classes:
         kb_path = output_path
         # To download DL-learner,
         # https://github.com/SmartDataAnalytics/DL-Learner/releases.
-        dl_learner_binary_path = f'{os.getcwd()}/dllearner-1.5.0/'
+        dl_learner_binary_path = '/home/leo/dllearner-1.5.0/'
         # Initialize ELTL
         eltl = DLLearnerBinder(binary_path=dl_learner_binary_path,
                                kb_path=kb_path, model='eltl')
