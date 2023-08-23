@@ -58,7 +58,7 @@ class IndividualLikelinessMeasurer:
                 
                 comparison_individual = OWLNamedIndividual(IRI(self._namespace,
                                                                comparison))
-                self.__diff = []
+                self._diff = []
 
                 # Get all types and properties of the comparison individual
                 self._types_comp_indirect = list(reasoner.types(
@@ -83,22 +83,37 @@ class IndividualLikelinessMeasurer:
                 # Find differences
                 for k in self._all_types:
                     if k not in self._types_count:
-                        self.__diff.append(k)
+                        # Counterfactual is not of this type
+                        self._diff.append(k)
                     if k not in self._types_comp:
-                        self.__diff.append(k)
-                for k in self._all_properties:
-                    all_objects_count = list(reasoner.object_property_values(self._individual, k))
-                    all_objects_comp = list(reasoner.object_property_values(comparison_individual, k))
-                    for an_object in all_objects_count:
-                        if an_object not in all_objects_comp:
-                            self.__diff.append(an_object)
-                    for an_object in all_objects_comp:
-                        if an_object not in all_objects_count:
-                            self.__diff.append(an_object)
+                        # Comparison individual is not of this type
+                        self._diff.append(k)
+                for k in self._properties_count:
+                    # Properties of the counterfactual
+                    objects_count = reasoner.object_property_values(self._individual, k)
+                    for j in objects_count:
+                        if k not in self._properties_comp: 
+                            # Comparison individual does not have this property
+                            self._diff.append({"property":k,"object":j})
+                        else:
+                            if j not in list(reasoner.object_property_values(comparison_individual, k)):
+                                # Property present, but different object
+                                self._diff.append({"property":k,"object":j})
+                for k in self._properties_comp:
+                    # Properties of the comparison individual
+                    objects_comp = reasoner.object_property_values(comparison_individual, k)
+                    for j in objects_comp:
+                        if k not in self._properties_count:
+                            # Counterfactual does not have this property
+                            self._diff.append({"property":k,"object":j})
+                        else:
+                            if j not in list(reasoner.object_property_values(self._individual, k)):
+                                # Property present, but different object
+                                self._diff.append({"property":k,"object":j})
 
-                if len(self.__diff) < self._lowest_diff:
-                    self._lowest_diff = len(self.__diff)
-                self._diff_dict[comparison_individual] = len(self.__diff)
+                if len(self._diff) < self._lowest_diff:
+                    self._lowest_diff = len(self._diff)
+                self._diff_dict[comparison_individual] = len(self._diff)
 
             print(f'{self.__concept}'
                   + " has a distance of "

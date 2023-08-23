@@ -70,7 +70,14 @@ class CandidateFinder:
         for i in concept_set:
             relevant.add(i) # relevant ← relevant ∪ c_set
             self.find_subclasses_with_subproperties(i, set())
-          
+        
+        """
+        The method find_subclasses_with_subproperties creates an extra loop for implementing sub_properties.
+        In a future version of Ontolearn, the reasoning should cover this automatically this way:
+        for i in concept_set:
+            for sub in set(self._reasoner.sub_classes(i, include_equivalent = True)))
+                sub_with_equiv.add(sub)
+        """        
         # avoid concepts that were already visited on this path
         unvisited = copy.deepcopy(self.sub_with_equiv)
         for i in unvisited:
@@ -111,7 +118,11 @@ class CandidateFinder:
             
             for path in paths_set: # each P ∈ P do
                 self.find_candidates(path, visited, relevant) # find_candidates(K , P, visited, relevant, x)
-
+             
+    """
+    This subroutine should become unnecessary once complex concepts can
+    be considered with instances(concept)
+    """
     def _check_relevance(self, concept, individual):
         for i in list(concept.operands()):
             if individual not in list(self._reasoner.instances(i)):

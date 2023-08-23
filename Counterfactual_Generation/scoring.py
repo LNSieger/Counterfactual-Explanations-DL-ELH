@@ -2,7 +2,7 @@ import os
 import copy
 from owlapy.model import IRI, OWLClassExpression
 from ontolearn.knowledge_base import KnowledgeBase
-from counterfactual_candidate_generator import \
+from counterfactual_candidate_generator_ELH import \
     CounterfactualCandidateGenerator
 from likeliness import IndividualLikelinessMeasurer
 
@@ -10,14 +10,14 @@ from likeliness import IndividualLikelinessMeasurer
 def ScoringCounterfactuals(reasoner, concept, data_file, NS,
                            concept_expression, all_individuals, individual,
                            real_concept = 'Unknown'):
-
+    
     print("Generating counterfactuals to individual"
           f"'{individual.get_iri().get_remainder()}'")
     candidate_generator = CounterfactualCandidateGenerator(concept, 
                                                            data_file,
                                                            individual, 
                                                            NS,
-                                                           saving=False)
+                                                           saving=True)
     candidate_generator.generate_candidates()
     candidates = candidate_generator.candidate_dict
 
