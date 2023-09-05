@@ -10,12 +10,12 @@ from owlapy.fast_instance_checker import OWLReasoner_FastInstanceChecker
 import csv
 import random
 import sys
-sys.path.append("//home/leo/sciebo/Python")
+os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.join(os.getcwd(), 'Counterfactual_Generation'))
 from scoring import ScoringCounterfactuals
 from materialize_KB import Materializer
-os.chdir("//home/leo")
 
-input_onto = "/home/leo/sciebo/Datasets/family-benchmark_rich_background_mod.owl"
+input_onto = f'{os.getcwd()}/Experiments/family-benchmark_rich_background_mod.owl'
 NS = "http://www.benchmark.org/family#"
 
 Materializer = Materializer(input_onto)
@@ -46,7 +46,7 @@ def RemoveClass(onto_base, onto_editing, anyclass, manager_editing, reasoner):
     manager_editing.remove_axiom(onto_editing, OWLDeclarationAxiom(anyclass))
     manager_editing.save_ontology(onto_editing, IRI.create(
         f'file:/Family_without_{anyclass.get_iri().get_remainder()}.owl'))
-    output_path = ('/home/leo/Family_without_'
+    output_path = (f'/{os.getcwd()}/Family_without_'
                    + f'{anyclass.get_iri().get_remainder()}.owl')
     return output_path
 
@@ -148,7 +148,7 @@ for anyclass in all_classes:
         kb_path = output_path
         # To download DL-learner,
         # https://github.com/SmartDataAnalytics/DL-Learner/releases.
-        dl_learner_binary_path = '/home/leo/dllearner-1.5.0/'
+        dl_learner_binary_path = f'{os.getcwd()}/dllearner-1.5.0/'
         # Initialize ELTL
         eltl = DLLearnerBinder(binary_path=dl_learner_binary_path,
                                kb_path=kb_path, model='eltl')
