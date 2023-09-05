@@ -10,13 +10,13 @@ import copy
 import csv
 import random
 import sys
-sys.path.append("//home/leo/sciebo/Python/counterfactuals_private_github")
+os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.join(os.getcwd(), 'Counterfactual_Generation'))
 from scoring import ScoringCounterfactuals
 from materialize_KB import Materializer
-os.chdir("//home/leo")
 random.seed(4141)
 
-input_onto = "/home/leo/sciebo/Datasets/animals_ELH.owl"
+input_onto = f'{os.getcwd()}/Experiments/animals_ELH.owl'
 NS = "http://dl-learner.org/benchmark/dataset/animals#"
 
 Materializer = Materializer(input_onto)
@@ -32,10 +32,10 @@ reasoner = OWLReasoner_FastInstanceChecker(onto,
                                            sub_properties=True)
 
 # Enter the absolute path of the input knowledge base
-kb_path = '/home/leo/sciebo/Datasets/animals_ELH.owl'
+kb_path = f'{os.getcwd()}/Experiments/animals_ELH.owl
 # To download DL-learner,
 # https://github.com/SmartDataAnalytics/DL-Learner/releases.
-dl_learner_binary_path = '/home/leo/dllearner-1.5.0/'
+dl_learner_binary_path = f'{os.getcwd()}/dllearner-1.5.0/'
 # Initialize ELTL
 eltl = DLLearnerBinder(binary_path=dl_learner_binary_path,
                        kb_path=kb_path,
