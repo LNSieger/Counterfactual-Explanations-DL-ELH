@@ -13,8 +13,11 @@ os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(os.path.join(os.getcwd(), 'Counterfactual_Generation'))
 from scoring import ScoringCounterfactuals
 
-data_file = f'{os.getcwd()}/Experiments/family-benchmark_rich_background_mod.owl'
-NS = 'http://www.benchmark.org/family#'
+input_onto = f'{os.getcwd()}/Experiments/family-benchmark_rich_background_mod.owl'
+NS = "http://www.benchmark.org/family#"
+
+Materializer = Materializer(input_onto)
+data_file = Materializer.materialize_ABox()
 
 # Create reasoners
 onto_base = KnowledgeBase(path=data_file).ontology()
