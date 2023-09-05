@@ -16,8 +16,11 @@ from scoring import ScoringCounterfactuals
 
 random.seed(4141)
 
-data_file = f'{os.getcwd()}/Experiments/animals_ELH.owl'
-NS = 'http://dl-learner.org/benchmark/dataset/animals#'
+input_onto = f'{os.getcwd()}/Experiments/animals_ELH.owl'
+NS = "http://dl-learner.org/benchmark/dataset/animals#"
+
+Materializer = Materializer(input_onto)
+data_file = Materializer.materialize_ABox()
 
 # Create reasoners
 onto = KnowledgeBase(path=data_file).ontology()
