@@ -1,6 +1,7 @@
 # Counterfactual Explanations for Concepts in ELH
 
 ## Folder Overview
+* The file Paper - Explaining Concepts in Description Logic.pdf contains the paper (unreviewed preprint).
 * Counterfactual_Generation contains all scripts necessary for our algorithms.
 * Experiments contains the ontologies, the experimental scripts using our algorithms and the results.
 * User-Survey-Preferences contains files regarding the study to evaluate our algorithms.
